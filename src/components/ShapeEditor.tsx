@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Button, ColorPicker, FieldSet, HorizontalGroup, InlineField, InlineFieldRow, InlineSwitch, Input, Select, VerticalGroup } from '@grafana/ui';
+import { Button, ColorPicker, FieldSet, HorizontalGroup, InlineField, InlineFieldRow, InlineSwitch, Input, Select, VerticalGroup, Dropdown, Menu } from '@grafana/ui';
 import { FieldType, PanelData, SelectableValue, StandardEditorProps, DataFrame } from '@grafana/data';
 import { 
   Shape, 
@@ -39,12 +39,17 @@ const getFieldOptions = (data: PanelData | any): Array<SelectableValue<string>> 
   series.forEach((frame: DataFrame, frameIndex: number) => {
     if (frame && frame.fields) {
       frame.fields.forEach((f: any) => {
+        // 数値フィールドのみを対象とする
+        if (f.type !== FieldType.number) {
+          return;
+        }
+
         // クエリインデックスをラベルに含めることでどのクエリからのフィールドかを識別
         const queryLabel = series.length > 1 ? `[Query ${String.fromCharCode(65 + frameIndex)}] ` : '';
         const fieldOption = {
           label: `${queryLabel}${f.name}`,
           value: f.name,
-          description: f.type === FieldType.number ? 'Numeric' : 'String',
+          description: 'Numeric',
           // フレームのインデックスを保存して、どのクエリ結果からのフィールドかを識別できるようにする
           meta: { frame: frameIndex },
         };
@@ -881,20 +886,31 @@ export const ShapeEditor: React.FC<ShapeEditorProps> = ({ value = [], onChange, 
       }
     }
   };
+
+  const addShapeMenu = (
+    <Menu>
+      {ShapeTypeOptions.map((option) => (
+        <Menu.Item
+          key={option.value}
+          label={option.label}
+          onClick={() => {
+            if (option.value) {
+              handleAddShape(option.value);
+            }
+          }}
+        />
+      ))}
+    </Menu>
+  );
   
   return (
     <div>
       <HorizontalGroup>
-        <Select
-          options={ShapeTypeOptions}
-          onChange={v => {
-            if (v.value) {
-              handleAddShape(v.value);
-            }
-          }}
-          placeholder="Add shape..."
-          width={20}
-        />
+        <Dropdown overlay={addShapeMenu}>
+          <Button variant="primary" icon="plus">
+            Add shape
+          </Button>
+        </Dropdown>
       </HorizontalGroup>
       
       {shapes.length > 0 && (

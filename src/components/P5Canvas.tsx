@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import p5 from 'p5';
 import { PanelData } from '@grafana/data';
 import { 
@@ -35,7 +35,7 @@ export const P5Canvas: React.FC<P5CanvasProps> = ({ options, data, width, height
   }, [options, data, width, height]);
 
   // Helper function to get value from field config
-  const getValueFromConfig = (config: FieldConfig, frame: any): number | string => {
+  const getValueFromConfig = useCallback((config: FieldConfig, frame: any): number | string => {
     try {
       if (config.type === 'constant') {
         return config.constant !== undefined ? config.constant : 0;
@@ -59,10 +59,10 @@ export const P5Canvas: React.FC<P5CanvasProps> = ({ options, data, width, height
       console.error('Error in getValueFromConfig:', error);
       return 0; // Return default value on error
     }
-  };
+  }, [data.series]);
 
   // Helper to get array values from a string or field
-  const getArrayFromConfig = (config: FieldConfig, frame: any): number[] => {
+  const getArrayFromConfig = useCallback((config: FieldConfig, frame: any): number[] => {
     try {
       if (config.type === 'constant' && typeof config.constant === 'string') {
         // Handle empty string case
@@ -112,10 +112,10 @@ export const P5Canvas: React.FC<P5CanvasProps> = ({ options, data, width, height
       console.error('Error in getArrayFromConfig:', error);
       return []; // Return empty array on error
     }
-  };
+  }, [data.series]);
 
   // Calculate and maintain aspect ratio for view limits
-  const calculateAspectRatio = (
+  const calculateAspectRatio = useCallback((
     minX: number, 
     maxX: number, 
     minY: number, 
@@ -157,10 +157,10 @@ export const P5Canvas: React.FC<P5CanvasProps> = ({ options, data, width, height
       minY: newMinY,
       maxY: newMaxY,
     };
-  };
+  }, []);
 
   // Draw empty canvas with just axes and grid
-  const drawEmptyCanvas = (p: p5, width: number, height: number, options: ShapeRendererOptions) => {
+  const drawEmptyCanvas = useCallback((p: p5, width: number, height: number, options: ShapeRendererOptions) => {
     const { viewLimits, axis } = options;
     let minX = viewLimits.xMin;
     let maxX = viewLimits.xMax;
@@ -218,12 +218,12 @@ export const P5Canvas: React.FC<P5CanvasProps> = ({ options, data, width, height
         p.line(xZero, 0, xZero, height);
       }
     }
-  };
+  }, [calculateAspectRatio]);
 
   // Helper function to load images (defined inline where needed)
 
   useEffect(() => {
-    if (!canvasRef.current || hasError) return () => {}; // return empty cleanup function
+    if (!canvasRef.current || hasError) { return () => {}; } // return empty cleanup function
 
     // Clear existing sketch if any
     if (sketchRef.current) {
@@ -253,7 +253,7 @@ export const P5Canvas: React.FC<P5CanvasProps> = ({ options, data, width, height
                 
                 // Process image shapes but defer loading until later
                 // This prevents the "Failed to fetch" error from sketch_verifier.js
-                const imagesToLoad: {id: string, path: string}[] = [];
+                const imagesToLoad: Array<{id: string, path: string}> = [];
                 
                 for (const shape of options.shapes) {
                   if (shape.type === 'image') {
@@ -332,7 +332,7 @@ export const P5Canvas: React.FC<P5CanvasProps> = ({ options, data, width, height
                 let hasVisibleShapes = false;
                 
                 options.shapes.forEach(shape => {
-                  if (!shape.visible) return;
+                  if (!shape.visible) { return; }
                   hasVisibleShapes = true;
 
                   switch (shape.type) {
@@ -527,7 +527,7 @@ export const P5Canvas: React.FC<P5CanvasProps> = ({ options, data, width, height
 
               // Draw each shape
               options.shapes.forEach(shape => {
-                if (!shape.visible) return;
+                if (!shape.visible) { return; }
 
                 // Common style settings
                 p.stroke(shape.strokeColor);
@@ -682,7 +682,7 @@ export const P5Canvas: React.FC<P5CanvasProps> = ({ options, data, width, height
                     // 座標の個数は少ない方に合わせる
                     const pointCount = Math.min(xPoints.length, yPoints.length);
                     
-                    if (pointCount < 2) break; // 少なくとも2点必要
+                    if (pointCount < 2) { break; } // 少なくとも2点必要
                     
                     if (s.fillColor && s.closePath) {
                       const fillColor = p.color(s.fillColor);
@@ -858,7 +858,7 @@ export const P5Canvas: React.FC<P5CanvasProps> = ({ options, data, width, height
         }
       }
     };
-  }, [options, data, width, height]);
+  }, [options, data, width, height, drawEmptyCanvas, getArrayFromConfig, getValueFromConfig, calculateAspectRatio, hasError]);
 
   if (hasError) {
     return (
