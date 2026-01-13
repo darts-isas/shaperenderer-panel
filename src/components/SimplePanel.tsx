@@ -60,9 +60,10 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fie
     },
   };
 
-  const panelOptions = {
-    ...defaultOptions,
-    ...options,
+  const panelOptions: ShapeRendererOptions = {
+    shapes: options.shapes || defaultOptions.shapes,
+    axis: { ...defaultOptions.axis, ...(options.axis || {}) },
+    viewLimits: { ...defaultOptions.viewLimits, ...(options.viewLimits || {}) },
   };
 
   return (

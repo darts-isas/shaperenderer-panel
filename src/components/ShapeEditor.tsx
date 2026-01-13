@@ -270,7 +270,11 @@ const createDefaultShape = (type: ShapeType): Shape => {
 
 export const ShapeEditor: React.FC<ShapeEditorProps> = ({ value = [], onChange, context }) => {
   // Access the shapes from the value prop
-  const shapes = value;
+  // Ensure each shape has a name - if not, provide a default based on type
+  const shapes = value.map(shape => ({
+    ...shape,
+    name: shape.name || `${shape.type} shape`,
+  }));
   // Access the panel data from context
   const data = context.data;
   
@@ -892,7 +896,7 @@ export const ShapeEditor: React.FC<ShapeEditorProps> = ({ value = [], onChange, 
       {ShapeTypeOptions.map((option) => (
         <Menu.Item
           key={option.value}
-          label={option.label}
+          label={option.label || String(option.value)}
           onClick={() => {
             if (option.value) {
               handleAddShape(option.value);
@@ -947,7 +951,7 @@ export const ShapeEditor: React.FC<ShapeEditorProps> = ({ value = [], onChange, 
                         onDoubleClick={() => setEditingShapeIndex(i)}
                         style={{ width: '200px', justifyContent: 'flex-start' }}
                       >
-                        {shape.name}
+                        [{shape.type}] {shape.name}
                       </Button>
                     )}
                     <Button size="sm" variant="destructive" icon="trash-alt" onClick={() => handleDeleteShape(i)} />
