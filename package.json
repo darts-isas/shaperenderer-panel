@@ -28,6 +28,8 @@
     "@testing-library/react": "14.0.0",
     "@types/jest": "^29.5.0",
     "@types/node": "^20.8.7",
+    "@types/react": "18",
+    "@types/react-dom": "18",
     "@types/testing-library__jest-dom": "5.14.8",
     "@typescript-eslint/eslint-plugin": "^6.18.0",
     "@typescript-eslint/parser": "^6.18.0",
@@ -63,7 +65,7 @@
     "webpack-virtual-modules": "^0.6.2"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
@@ -71,11 +73,19 @@
     "@grafana/runtime": "^11.5.3",
     "@grafana/schema": "^11.5.3",
     "@grafana/ui": "^11.5.3",
-    "@types/p5": "^1.7.6",
     "p5": "^2.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-p5": "^1.4.1"
   },
-  "packageManager": "pnpm@9.15.4"
+  "packageManager": "pnpm@9.15.4",
+  "pnpm": {
+    "overrides": {
+      "@types/react": "18.3.27",
+      "@types/react-dom": "18.3.7",
+      "@remix-run/router": ">=1.23.2",
+      "react-router": ">=6.30.2",
+      "diff": ">=8.0.3"
+    }
+  }
 }

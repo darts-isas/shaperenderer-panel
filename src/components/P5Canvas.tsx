@@ -2,6 +2,11 @@ import * as React from 'react';
 import { useRef, useEffect, useState, useCallback } from 'react';
 import p5 from 'p5';
 import { PanelData } from '@grafana/data';
+
+// Extend p5 type with missing curveVertex method
+interface ExtendedP5 extends p5 {
+  curveVertex(x: number, y: number): p5;
+}
 import { 
   ShapeRendererOptions,
   FieldConfig,
@@ -703,42 +708,42 @@ export const P5Canvas: React.FC<P5CanvasProps> = ({ options, data, width, height
                         if (pointCount === 3) {
                           // Special case for exactly 3 points in a closed curve
                           // We need to repeat points in the right order for proper curve
-                          p.curveVertex(mapX(xPoints[2]), mapY(yPoints[2])); // Last point as first control
+                          (p as ExtendedP5).curveVertex(mapX(xPoints[2]), mapY(yPoints[2])); // Last point as first control
                           
                           // Add all points
                           for (let i = 0; i < pointCount; i++) {
-                            p.curveVertex(mapX(xPoints[i]), mapY(yPoints[i]));
+                            (p as ExtendedP5).curveVertex(mapX(xPoints[i]), mapY(yPoints[i]));
                           }
                           
                           // Repeat first points to complete the curve
-                          p.curveVertex(mapX(xPoints[0]), mapY(yPoints[0]));
-                          p.curveVertex(mapX(xPoints[1]), mapY(yPoints[1]));
+                          (p as ExtendedP5).curveVertex(mapX(xPoints[0]), mapY(yPoints[0]));
+                          (p as ExtendedP5).curveVertex(mapX(xPoints[1]), mapY(yPoints[1]));
                         } else {
                           // For closed curves with 4+ points, we need to wrap around points for smooth connection
                           // Add the second-to-last point at the beginning for control
-                          p.curveVertex(mapX(xPoints[pointCount-2]), mapY(yPoints[pointCount-2]));
+                          (p as ExtendedP5).curveVertex(mapX(xPoints[pointCount-2]), mapY(yPoints[pointCount-2]));
                           
                           // Add all points
                           for (let i = 0; i < pointCount; i++) {
-                            p.curveVertex(mapX(xPoints[i]), mapY(yPoints[i]));
+                            (p as ExtendedP5).curveVertex(mapX(xPoints[i]), mapY(yPoints[i]));
                           }
                           
                           // Repeat first two points at the end to complete the smooth curve
-                          p.curveVertex(mapX(xPoints[0]), mapY(yPoints[0]));
-                          p.curveVertex(mapX(xPoints[1]), mapY(yPoints[1]));
+                          (p as ExtendedP5).curveVertex(mapX(xPoints[0]), mapY(yPoints[0]));
+                          (p as ExtendedP5).curveVertex(mapX(xPoints[1]), mapY(yPoints[1]));
                         }
                       } else {
                         // For open curves, duplicate first and last points as control points
                         // First point repeated as control point
-                        p.curveVertex(mapX(xPoints[0]), mapY(yPoints[0]));
+                        (p as ExtendedP5).curveVertex(mapX(xPoints[0]), mapY(yPoints[0]));
                         
                         // Add all points
                         for (let i = 0; i < pointCount; i++) {
-                          p.curveVertex(mapX(xPoints[i]), mapY(yPoints[i]));
+                          (p as ExtendedP5).curveVertex(mapX(xPoints[i]), mapY(yPoints[i]));
                         }
                         
                         // Last point repeated as control point
-                        p.curveVertex(mapX(xPoints[pointCount-1]), mapY(yPoints[pointCount-1]));
+                        (p as ExtendedP5).curveVertex(mapX(xPoints[pointCount-1]), mapY(yPoints[pointCount-1]));
                       }
                     } else {
                       // Regular non-smooth polyline
