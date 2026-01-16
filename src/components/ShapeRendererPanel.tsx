@@ -29,7 +29,7 @@ const getStyles = () => {
   };
 };
 
-export const SimplePanel: React.FC<Props> = ({ options, data, width, height, fieldConfig, id }) => {
+export const ShapeRendererPanel: React.FC<Props> = ({ options, data, width, height, fieldConfig, id }) => {
   const styles = useStyles2(getStyles);
 
   if (data.state === 'Error') {

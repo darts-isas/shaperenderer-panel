@@ -1,10 +1,10 @@
 import { PanelPlugin } from '@grafana/data';
 import { ShapeRendererOptions } from './types';
-import { SimplePanel } from './components/SimplePanel';
+import { ShapeRendererPanel } from './components/ShapeRendererPanel';
 import { ShapeEditor } from './components/ShapeEditor';
 import { AxisConfigEditor, ViewLimitsEditor } from './components/ConfigEditors';
 
-export const plugin = new PanelPlugin<ShapeRendererOptions>(SimplePanel)
+export const plugin = new PanelPlugin<ShapeRendererOptions>(ShapeRendererPanel)
   .setDefaults({
     shapes: [],
     axis: {
