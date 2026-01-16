@@ -8,7 +8,7 @@
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --cache --ignore-path ./.gitignore --ext .js,.jsx,.ts,.tsx .",
-    "lint:fix": "npm run lint -- --fix && prettier --write --list-different .",
+    "lint:fix": "pnpm lint --fix && prettier --write --list-different .",
     "e2e": "playwright test",
     "server": "docker compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest"
@@ -77,5 +77,5 @@
     "react-dom": "18.2.0",
     "react-p5": "^1.4.1"
   },
-  "packageManager": "npm@10.8.2"
+  "packageManager": "pnpm@9.15.4"
 }

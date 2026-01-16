@@ -12,14 +12,14 @@ Shaperenderer は、ダッシュボード上でインタラクティブな 2D �
 - データフレームが空でも描画されるため、実データを接続する前にレイアウトを試作できます。
 
 ## 開発セットアップ
-- `npm install` で依存関係をインストールします（`package.json` に記載のとおり Node 22 以上が必要です）。
-- `npm run dev` で開発中の監視付き webpack ビルドを起動します。
-- `npm run build` で `dist/` フォルダーに本番用ビルドを生成します。
-- `npm run lint`、`npm run typecheck`、`npm run test` でコードベースを健全に保ちます。
-- `npm run sign` で配布前にプラグインパッケージへ署名します。
+- `pnpm install` で依存関係をインストールします（`package.json` に記載のとおり Node 22 以上が必要です）。
+- `pnpm dev` で開発中の監視付き webpack ビルドを起動します。
+- `pnpm build` で `dist/` フォルダーに本番用ビルドを生成します。
+- `pnpm lint`、`pnpm typecheck`、`pnpm test` でコードベースを健全に保ちます。
+- `pnpm sign` で配布前にプラグインパッケージへ署名します。
 
 ## Grafana での使用方法
-1. ビルド済みプラグインを Grafana のプラグインディレクトリにコピーするか、開発モード（`npm run dev`）を利用します。
+1. ビルド済みプラグインを Grafana のプラグインディレクトリにコピーするか、開発モード（`pnpm dev`）を利用します。
 2. ダッシュボードに新しい **Shaperenderer Panel** を追加します。
 3. パネルオプションを開き、形状を追加してデータとの紐付けを開始します。
 

@@ -12,14 +12,14 @@ Shaperenderer is a Grafana panel plugin that lets you compose interactive 2D gra
 - Render even when data frames are empty so you can prototype a layout before connecting real data.
 
 ## Development Setup
-- `npm install` to install dependencies (requires Node 22 or newer as defined in `package.json`).
-- `npm run dev` to start webpack in watch mode while you develop the plugin.
-- `npm run build` to produce a production build in the `dist/` folder.
-- `npm run lint`, `npm run typecheck`, and `npm run test` to keep the codebase clean.
-- `npm run sign` to sign the plugin package before distribution.
+- `pnpm install` to install dependencies (requires Node 22 or newer as defined in `package.json`).
+- `pnpm dev` to start webpack in watch mode while you develop the plugin.
+- `pnpm build` to produce a production build in the `dist/` folder.
+- `pnpm lint`, `pnpm typecheck`, and `pnpm test` to keep the codebase clean.
+- `pnpm sign` to sign the plugin package before distribution.
 
 ## Using the Panel in Grafana
-1. Copy the built plugin into Grafana’s plugin directory or use the development mode (`npm run dev`).
+1. Copy the built plugin into Grafana's plugin directory or use the development mode (`pnpm dev`).
 2. Add a new **Shaperenderer Panel** to a dashboard.
 3. Open the panel options to begin adding shapes and wiring them to your data.
 
